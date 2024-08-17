@@ -1,6 +1,7 @@
-from typing import Optional
 from enum import Enum
-from beaupy import select
+
+# from typing import Optional
+# from beaupy import select
 
 class Framework(Enum):
     React = 'React'
@@ -10,14 +11,14 @@ class Framework(Enum):
     SvelteKit = 'SvelteKit'
     Astro = 'Astro'
 
-def ask():
-    print("Choose your framework:")
-    selected: Optional[Framework] = select(
-        list(Framework),
-        preprocessor=lambda x: x.value
-    )
+# def ask():
+#     print("Choose your framework:")
+#     selected: Optional[Framework] = select(
+#         list(Framework),
+#         preprocessor=lambda x: x.value
+#     )
     
-    if selected is None:
-        raise Exception("Invalid input")
+#     if selected is None:
+#         raise Exception("Invalid input")
 
-    return selected
+#     return selected
