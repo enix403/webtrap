@@ -1,6 +1,6 @@
-from webtrap.common import Constant
+from enum import Enum
 
-class PackageManager:
-    Pnpm = Constant('pnpm', 'pnpm')
-    Yarn = Constant('yarn', 'yarn')
-    Npm = Constant('npm', 'npm')
+class PackageManager(Enum):
+    Pnpm = 'pnpm'
+    Yarn = 'yarn'
+    Npm = 'npm'

@@ -1,7 +1,7 @@
-from webtrap.common import Constant
+from enum import Enum
 
-class Framework:
-    React = Constant('react', 'React')
+class Framework(Enum):
+    React = 'React'
     # Remix = Constant('remix', 'Remix')
     # Next = Constant('next', 'Next')
     # Svelte = Constant('svelte', 'Svelte')

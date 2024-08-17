@@ -1,5 +1,5 @@
-from webtrap.common import Constant
+from enum import Enum
 
-class Langauge:
-    Js = Constant('js', 'JavaScript')
-    Ts = Constant('ts', 'TypeScript')
+class Langauge(Enum):
+    Js = 'JavaScript'
+    Ts = 'TypeScript'
