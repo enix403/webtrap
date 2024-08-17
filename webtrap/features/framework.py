@@ -1,9 +1,23 @@
+from typing import Optional
 from enum import Enum
+from beaupy import select
 
 class Framework(Enum):
     React = 'React'
-    # Remix = Constant('remix', 'Remix')
-    # Next = Constant('next', 'Next')
-    # Svelte = Constant('svelte', 'Svelte')
-    # SvelteKit = Constant('svelte-kit', 'SvelteKit')
-    # Astro = Constant('astro', 'Astro')
+    Remix = 'Remix'
+    Next = 'Next'
+    Svelte = 'Svelte'
+    SvelteKit = 'SvelteKit'
+    Astro = 'Astro'
+
+def ask():
+    print("Choose your framework:")
+    selected: Optional[Framework] = select(
+        list(Framework),
+        preprocessor=lambda x: x.value
+    )
+    
+    if selected is None:
+        raise Exception("Invalid input")
+
+    return selected
