@@ -1,0 +1,80 @@
+
+app name
+package name
+
+package manager:
+  pnpm
+  yarn
+  npm
+
+framework
+  react
+  remix
+  next
+  svelte
+  astro
+  
+langauge
+  js
+  ts
+  
+tailwind: (and plugins)
+  breakpoint inspector
+  ripple-ui
+
+prettier:
+  prettier-plugin-tailwindcss
+
+icons:
+  tabler
+  hero
+  phospor
+  --other
+
+ui-kit:
+  mantine
+  blueprint
+  bootstrap
+  MUI
+  radix ui
+  nextui
+
+routing:
+  --
+
+state-mgmt:
+  --
+
+independent libraries:
+  axios
+  clsx
+  date-fns
+  immer
+  framer-motion
+  helmet
+  svgr
+  ts-pattern
+
+fontsource:
+  common
+
+vercel
+ts/jsconfig paths
+
+-----------------------
+
+common features:
+    lazyload
+    auth state
+
+common components:
+    image upload and previews
+
+common pages:
+    landing page
+    dashboard
+    user profile
+    auth views
+    not found
+    list view
+    navbar

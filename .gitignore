@@ -1,0 +1,13 @@
+*.db
+*.sqlite
+*.sqlite3
+
+uploaded/*
+!uploaded/.gitkeep
+
+core/migrations/
+
+.venv/
+
+__pycache__/
+*.pyc
