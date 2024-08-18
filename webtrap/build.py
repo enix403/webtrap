@@ -1,5 +1,5 @@
-import os
 import shutil
+from pathlib import Path
 
 from fs import open_fs
 from fs.memoryfs import MemoryFS
@@ -14,7 +14,7 @@ from webtrap.printers import (
     ViteConfigPrinter,
 )
 
-def buildup(spec: AppSpec):
+def buildup(spec: AppSpec, output_path: str):
     fs = MemoryFS()
     pkgjson = PackageManifest('my-app')
     viteconf = ViteConfigPrinter()
@@ -33,15 +33,15 @@ def buildup(spec: AppSpec):
     with artifact.fs.open(spec.language.file('vite.config'), 'w') as f:
         f.write(artifact.viteconf.get())
 
-    shutil.rmtree('generated/react') # empty the directory
-    with open_fs('generated/react') as target:
-        copy_fs(artifact.fs, target)
+    dirpath = Path(output_path)
 
-    # os.symlink(
-    #     '../node_modules',
-    #     'generated/react/node_modules',
-    #     target_is_directory=True
-    # )
+    if dirpath.is_dir():
+        shutil.rmtree(dirpath)
+    elif dirpath.is_file():
+        dirpath.unlink()
+
+    with open_fs(str(dirpath), create=True) as target:
+        copy_fs(artifact.fs, target)
 
 def fill_framework(spec: AppSpec, artifact: Artifact):
     assert(spec.framework is Framework.React)

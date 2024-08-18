@@ -50,7 +50,10 @@ def start():
         pkg_manager=PackageManager.Pnpm
     )
     # spec = input_spec()
-    buildup(spec)
+
+    output_path = "generated/react"
+
+    buildup(spec, output_path)
 
 
 
