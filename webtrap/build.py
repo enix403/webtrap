@@ -43,6 +43,12 @@ def buildup(spec: AppSpec, output_path: str):
     with open_fs(str(dirpath), create=True) as target:
         copy_fs(artifact.fs, target)
 
+# ----------------------------------------------
+# ----------------------------------------------
+# ----------------------------------------------
+# ----------------------------------------------
+# ----------------------------------------------
+
 def fill_framework(spec: AppSpec, artifact: Artifact):
     assert(spec.framework is Framework.React)
 
