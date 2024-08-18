@@ -1,6 +1,6 @@
 from typing import Any, override
 
-from webtrap.jsobject import JSArray, JSNumber, JSObject, JSRaw
+from webtrap.jsobject import JSObject, JSRaw
 
 def get_indent(line: str):
     return len(line[:-len(line.lstrip())])
@@ -8,14 +8,16 @@ def get_indent(line: str):
 def pullback(content: str):
     lines = content.splitlines()
 
-    min_indent = float('inf')
+    min_indent = -1
 
     for line in lines:
         if len(line.strip()) > 0:
-            min_indent = min(
-                get_indent(line),
-                min_indent
-            )
+            min_indent = get_indent(line)
+            break
+
+    # print(min_indent)
+    if min_indent == -1:
+        return content
 
     for i in range(len(lines)):
         remove_indent = min(
@@ -25,7 +27,7 @@ def pullback(content: str):
 
         lines[i] = lines[i][remove_indent:]
 
-    return '\n'.join(lines).strip() + '\n'
+    return '\n'.join(lines).strip('\n') + '\n'
 
 def indent_lines(content: str, indent=2):
     lines = content.splitlines()
@@ -62,6 +64,7 @@ class Printer:
         self.add_line('')
 
     def add_pulled(self, content: str):
+        # print(pullback(content))
         self.add_chunk(pullback(content))
 
 # ================================================
@@ -137,12 +140,12 @@ class TailwindConfigPrinter(JSPrinter):
     def get(self):
         js_object = self.compile().output(2)
 
-        # if self.has_imports:
-        # self.add_newline()
+        if self.has_imports:
+            self.add_newline()
 
         self.add_pulled(f"""
-            /** @type {{import('tailwindcss').Config}} */
-            export default {js_object};
+        /** @type {{import('tailwindcss').Config}} */
+        export default {js_object};
         """)
 
         return super().get()
