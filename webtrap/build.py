@@ -24,6 +24,18 @@ def buildup(spec: AppSpec):
 def fill_framework(spec: AppSpec, artifact: Artifact):
     assert(spec.framework is Framework.React)
 
+    artifact.pkgjson.add_dep('react', '^18.3.1')
+    artifact.pkgjson.add_dep('react-dom', '^18.3.1')
+
+    artifact.pkgjson.add_dev_dep("@types/react", "^18.3.3")
+    artifact.pkgjson.add_dev_dep("@types/react-dom", "^18.3.0")
+    artifact.pkgjson.add_dev_dep("@vitejs/plugin-react", "^4.3.1")
+    artifact.pkgjson.add_dev_dep("vite", "^5.4.1")
+
+    artifact.pkgjson.add_script("dev", "vite")
+    artifact.pkgjson.add_script("build", "vite build")
+    artifact.pkgjson.add_script("preview", "vite preview")
+
     artifact.fs.makedir("src")
     src = artifact.fs.opendir('src')
 
