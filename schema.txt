@@ -66,6 +66,7 @@ ts/jsconfig paths
 common features:
     lazyload
     auth state
+    api connections
 
 common components:
     image upload and previews
@@ -78,3 +79,10 @@ common pages:
     not found
     list view
     navbar
+
+-----------------------
+
+Files:
+  .gitignore
+  public/
+  README.md
