@@ -1,30 +1,18 @@
-from dataclasses import dataclass
-
-from webtrap.manifest import PackageManifest
-from .features.framework import Framework
-from .features.langauge import Langauge
-
 from fs import open_fs
 from fs.memoryfs import MemoryFS
 from fs.copy import copy_fs
 
-@dataclass
-class AppSpec:
-    framework: Framework
-    language: Langauge
+from webtrap.appspec import AppSpec, Artifact
+from webtrap.features.framework import fr_fill_artifact
+from webtrap.manifest import PackageManifest
 
-@dataclass
-class Artifact:
-    fs: MemoryFS
-    pkgjson: PackageManifest
-
-def buildup():
+def buildup(spec: AppSpec):
     fs = MemoryFS()
     pkgjson = PackageManifest('my-app')
 
     artifact = Artifact(fs, pkgjson)
 
-    # fs.makedir('src')
+    fr_fill_artifact(spec, artifact)
 
     with artifact.fs.open('package.json', 'w') as f:
         f.write(artifact.pkgjson.compile_str())

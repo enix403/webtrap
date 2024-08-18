@@ -1,7 +1,6 @@
 from enum import Enum
 
-# from typing import Optional
-# from beaupy import select
+from webtrap.appspec import AppSpec, Artifact
 
 class Framework(Enum):
     React = 'React'
@@ -11,14 +10,6 @@ class Framework(Enum):
     SvelteKit = 'SvelteKit'
     Astro = 'Astro'
 
-# def ask():
-#     print("Choose your framework:")
-#     selected: Optional[Framework] = select(
-#         list(Framework),
-#         preprocessor=lambda x: x.value
-#     )
-    
-#     if selected is None:
-#         raise Exception("Invalid input")
 
-#     return selected
+def fr_fill_artifact(spec: AppSpec, artifact: Artifact):
+    assert spec.framework is Framework.React
