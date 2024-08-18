@@ -46,7 +46,7 @@ def start():
         app_name="Dummy App",
         pkg_name="dummy-app",
         framework=Framework.React,
-        language=Langauge.Ts,
+        language=Langauge.Js,
         pkg_manager=PackageManager.Pnpm
     )
     # spec = input_spec()
