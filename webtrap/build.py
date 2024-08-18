@@ -36,23 +36,23 @@ def fill_framework(spec: AppSpec, artifact: Artifact):
         p.add_newline()
 
         p.add_pulled("""
-            const root = document.getElementById('root');
-            createRoot(root).render(<App />);
+        const root = document.getElementById('root');
+        createRoot(root).render(<App />);
         """)
         f.write(p.get())
 
     with src.open(spec.language.file_jsx("App"), 'w') as f:
         p = JSFilePrinter()
         p.add_pulled("""
-            export function App() {
-              return (
-                <>
-                  <h1>React App</h1>
-                  <div>
-                    Hello there
-                  </div>
-                </>
-              );
-            }
+        export function App() {
+          return (
+            <>
+              <h1>React App</h1>
+              <div>
+                Hello there
+              </div>
+            </>
+          );
+        }
         """)
         f.write(p.get())
