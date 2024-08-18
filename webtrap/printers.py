@@ -87,17 +87,15 @@ class ViteConfigPrinter(JSPrinter):
         self.plugins.insert(insert_index, plugin)
 
     def compile(self) -> JSObject:
-        return JSObject(
-            plugins=JSArray([
-                JSRaw(p) for p in self.plugins
-            ]),
-            define=JSObject(**{
-                'process.env': JSObject()
-            }),
-            server=JSObject(
-                port=JSNumber(4200)
-            )
-        )
+        return JSObject({
+            'plugins': [JSRaw(p) for p in self.plugins],
+            'define': {
+                'process.env': {}
+            },
+            'server': {
+                'port': 4200
+            }
+        })
 
     @override
     def get(self):
@@ -124,17 +122,15 @@ class TailwindConfigPrinter(JSPrinter):
         self.plugins.insert(insert_index, plugin)
 
     def compile(self) -> JSObject:
-        return JSObject(
-            plugins=JSArray([
-                JSRaw(p) for p in self.plugins
-            ]),
-            define=JSObject(**{
-                'process.env': JSObject()
-            }),
-            server=JSObject(
-                port=JSNumber(4200)
-            )
-        )
+        return JSObject({
+            'plugins': [JSRaw(p) for p in self.plugins],
+            'define': {
+                'process.env': {}
+            },
+            'server': {
+                'port': 4200
+            }
+        })
 
     @override
     def get(self):

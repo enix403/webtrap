@@ -1,9 +1,22 @@
 import re
-from typing import Any
+from typing import Any, Iterable
 
-# Utility function to check if a string is a valid JavaScript identifier
 def is_valid_js_identifier(key):
     return re.match(r'^[a-zA-Z_$][a-zA-Z0-9_$]*$', key) is not None
+
+def py_to_js(obj: Any):
+    if isinstance(obj, JSPrimitive):
+        return obj
+    elif isinstance(obj, str):
+        return JSString(obj)
+    elif isinstance(obj, (int, float)):
+        return JSNumber(obj)
+    elif isinstance(obj, (list, tuple, set)):
+        return JSArray(obj)
+    elif isinstance(obj, dict):
+        return JSObject(obj)
+
+    raise Exception("Unknown object")
 
 class JSPrimitive:
     def output(self, indent=2, curr_indent=0):
@@ -31,8 +44,8 @@ class JSRaw(JSPrimitive):
         return self.value
 
 class JSArray(JSPrimitive):
-    def __init__(self, values: list[JSPrimitive]):
-        self.values = values
+    def __init__(self, values: Iterable[Any]):
+        self.values = list(map(py_to_js, values))
 
     def output(self, indent=2, curr_indent=0):
         if len(self.values) == 0:
@@ -49,9 +62,13 @@ class JSArray(JSPrimitive):
         ]
         return f'[\n{",\n".join(elements)}\n{curr_indent_str}]'
 
-class JSObject:
-    def __init__(self, **kwargs):
-        self.properties = kwargs
+class JSObject(JSPrimitive):
+    def __init__(self, obj):
+        properties = {}
+        for key, val in obj.items():
+            properties[key] = py_to_js(val)
+
+        self.properties = properties
 
     def output(self, indent=2, curr_indent=0):
         if len(self.properties) == 0:
