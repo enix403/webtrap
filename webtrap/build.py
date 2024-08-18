@@ -4,7 +4,11 @@ from fs.copy import copy_fs
 
 from webtrap.options import AppSpec, Artifact, Framework
 from webtrap.manifest import PackageManifest
-from webtrap.printers import JSFilePrinter, Printer
+from webtrap.printers import (
+    Printer,
+    JSFilePrinter,
+    ViteConfigPrinter,
+)
 
 def buildup(spec: AppSpec):
     fs = MemoryFS()
@@ -90,13 +94,17 @@ def fill_framework(spec: AppSpec, artifact: Artifact):
         f.write(p.get())
 
     with artifact.fs.open(spec.language.file('vite.config'), 'w') as f:
-        p = Printer()
-        p.add_pulled("""
-        import { defineConfig } from 'vite'
-        import react from '@vitejs/plugin-react'
+        p = ViteConfigPrinter()
 
-        export default defineConfig({
-          plugins: [react()],
-        })
-        """)
+        p.add_import("react", "@vitejs/plugin-react")
+        p.add_plugin("react()")
+
+        # p.add_pulled("""
+        # import { defineConfig } from 'vite'
+        # import react from '@vitejs/plugin-react'
+
+        # export default defineConfig({
+        #   plugins: [react()],
+        # })
+        # """)
         f.write(p.get())

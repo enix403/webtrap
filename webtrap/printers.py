@@ -1,3 +1,6 @@
+import json
+from typing import override
+
 def get_indent(line: str):
     return len(line[:-len(line.lstrip())])
 
@@ -64,3 +67,37 @@ class JSFilePrinter(Printer):
 
     def add_effect_import(self, loc: str):
         self.add_line(f'import \"{loc}\";')
+
+
+class ViteConfigPrinter(JSFilePrinter):
+    def __init__(self):
+        super().__init__()
+        self.plugins: list[str] = []
+
+        self.add_import("{ defineConfig }", "vite")
+
+    def add_plugin(self, plugin: str, index: int | None = None):
+        insert_index = len(self.plugins) if index is None else index
+        self.plugins.insert(insert_index, plugin)
+
+    def compile(self):
+        return {
+            'plugins': '[' + ',\n'.join(self.plugins) + ']',
+            'define': {
+                "process.env": {}
+            },
+            'server': {
+                'port': 4200
+            },
+        }
+
+    @override
+    def get(self):
+        configjson = json.dumps(self.compile(), indent=2)
+
+        self.add_newline()
+        self.add_pulled(f"""
+            export default defineConfig({configjson});
+        """)
+
+        return super().get()
