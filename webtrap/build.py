@@ -4,7 +4,7 @@ from fs.copy import copy_fs
 
 from webtrap.options import AppSpec, Artifact, Framework
 from webtrap.manifest import PackageManifest
-from webtrap.printers import JSFilePrinter
+from webtrap.printers import JSFilePrinter, Printer
 
 def buildup(spec: AppSpec):
     fs = MemoryFS()
@@ -39,7 +39,8 @@ def fill_framework(spec: AppSpec, artifact: Artifact):
     artifact.fs.makedir("src")
     src = artifact.fs.opendir('src')
 
-    with src.open(spec.language.file_jsx("main"), 'w') as f:
+    mainfile_name = spec.language.file_jsx("main")
+    with src.open(mainfile_name, 'w') as f:
         p = JSFilePrinter()
 
         p.add_import("{ createRoot }", 'react-dom/client')
@@ -66,5 +67,36 @@ def fill_framework(spec: AppSpec, artifact: Artifact):
             </>
           );
         }
+        """)
+        f.write(p.get())
+
+    with artifact.fs.open("index.html", 'w') as f:
+        p = Printer()
+        p.add_pulled(f"""
+        <!DOCTYPE HTML>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>{spec.app_name}</title>
+          </head>
+          <body>
+            <div id="root"></div>
+            <script type="module" src="/src/{mainfile_name}"></script>
+          </body>
+        </html>
+        """)
+        f.write(p.get())
+
+    with artifact.fs.open(spec.language.file('vite.config'), 'w') as f:
+        p = Printer()
+        p.add_pulled("""
+        import { defineConfig } from 'vite'
+        import react from '@vitejs/plugin-react'
+
+        export default defineConfig({
+          plugins: [react()],
+        })
         """)
         f.write(p.get())

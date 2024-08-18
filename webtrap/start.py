@@ -42,7 +42,6 @@ def input_spec():
     return spec
 
 def start():
-    # spec = input_spec()
     spec = AppSpec(
         app_name="Dummy App",
         pkg_name="dummy-app",
@@ -50,6 +49,7 @@ def start():
         language=Langauge.Ts,
         pkg_manager=PackageManager.Pnpm
     )
+    # spec = input_spec()
     buildup(spec)
 
 
