@@ -1,6 +1,8 @@
 import json
 from typing import override
 
+from webtrap.jsobject import JSArray, JSNumber, JSObject, JSRaw
+
 def get_indent(line: str):
     return len(line[:-len(line.lstrip())])
 
@@ -80,20 +82,22 @@ class ViteConfigPrinter(JSFilePrinter):
         insert_index = len(self.plugins) if index is None else index
         self.plugins.insert(insert_index, plugin)
 
-    def compile(self):
-        return {
-            'plugins': '[' + ',\n'.join(self.plugins) + ']',
-            'define': {
-                "process.env": {}
-            },
-            'server': {
-                'port': 4200
-            },
-        }
+    def compile(self) -> JSObject:
+        return JSObject(
+            plugins=JSArray([
+                JSRaw(p) for p in self.plugins
+            ]),
+            define=JSObject(**{
+                'process.env': JSObject()
+            }),
+            server=JSObject(
+                port=JSNumber(4200)
+            )
+        )
 
     @override
     def get(self):
-        configjson = json.dumps(self.compile(), indent=2)
+        configjson = self.compile().output(2)
 
         self.add_newline()
         self.add_pulled(f"""

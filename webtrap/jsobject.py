@@ -1,4 +1,5 @@
 import re
+from typing import Any
 
 # Utility function to check if a string is a valid JavaScript identifier
 def is_valid_js_identifier(key):
@@ -30,10 +31,13 @@ class JSRaw(JSPrimitive):
         return self.value
 
 class JSArray(JSPrimitive):
-    def __init__(self, *values):
+    def __init__(self, values: list[JSPrimitive]):
         self.values = values
 
     def output(self, indent=2, curr_indent=0):
+        if len(self.values) == 0:
+            return '[]'
+
         curr_indent_str = ' ' * curr_indent
 
         next_indent = curr_indent + indent;
@@ -50,6 +54,9 @@ class JSObject:
         self.properties = kwargs
 
     def output(self, indent=2, curr_indent=0):
+        if len(self.properties) == 0:
+            return '{}'
+
         curr_indent_str = ' ' * curr_indent
 
         next_indent = curr_indent + indent;

@@ -13,13 +13,21 @@ from webtrap.printers import (
 def buildup(spec: AppSpec):
     fs = MemoryFS()
     pkgjson = PackageManifest('my-app')
+    viteconf = ViteConfigPrinter()
 
-    artifact = Artifact(fs, pkgjson)
+    artifact = Artifact(
+        fs,
+        pkgjson,
+        viteconf
+    )
 
     fill_framework(spec, artifact)
 
     with artifact.fs.open('package.json', 'w') as f:
         f.write(artifact.pkgjson.compile_str())
+
+    with artifact.fs.open(spec.language.file('vite.config'), 'w') as f:
+        f.write(artifact.viteconf.get())
 
     with open_fs('generated') as target:
         target.removetree('/') # empty the directory
@@ -39,6 +47,9 @@ def fill_framework(spec: AppSpec, artifact: Artifact):
     artifact.pkgjson.add_script("dev", "vite")
     artifact.pkgjson.add_script("build", "vite build")
     artifact.pkgjson.add_script("preview", "vite preview")
+
+    artifact.viteconf.add_import("react", "@vitejs/plugin-react")
+    artifact.viteconf.add_plugin("react()")
 
     artifact.fs.makedir("src")
     src = artifact.fs.opendir('src')
@@ -91,20 +102,4 @@ def fill_framework(spec: AppSpec, artifact: Artifact):
           </body>
         </html>
         """)
-        f.write(p.get())
-
-    with artifact.fs.open(spec.language.file('vite.config'), 'w') as f:
-        p = ViteConfigPrinter()
-
-        p.add_import("react", "@vitejs/plugin-react")
-        p.add_plugin("react()")
-
-        # p.add_pulled("""
-        # import { defineConfig } from 'vite'
-        # import react from '@vitejs/plugin-react'
-
-        # export default defineConfig({
-        #   plugins: [react()],
-        # })
-        # """)
         f.write(p.get())

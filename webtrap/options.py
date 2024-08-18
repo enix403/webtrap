@@ -1,8 +1,10 @@
 from enum import Enum
 from dataclasses import dataclass
+from fs.memoryfs import MemoryFS
+
 
 from .manifest import PackageManifest
-from fs.memoryfs import MemoryFS
+from .printers import ViteConfigPrinter
 
 class Framework(Enum):
     React = 'React'
@@ -43,3 +45,4 @@ class AppSpec:
 class Artifact:
     fs: MemoryFS
     pkgjson: PackageManifest
+    viteconf: ViteConfigPrinter
