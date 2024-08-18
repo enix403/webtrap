@@ -11,6 +11,7 @@ from webtrap.manifest import PackageManifest
 from webtrap.printers import (
     Printer,
     JSPrinter,
+    TailwindConfigPrinter,
     ViteConfigPrinter,
 )
 
@@ -18,21 +19,27 @@ def buildup(spec: AppSpec, output_path: str):
     fs = MemoryFS()
     pkgjson = PackageManifest(spec.pkg_name)
     viteconf = ViteConfigPrinter()
+    tailwindconf = TailwindConfigPrinter()
 
     artifact = Artifact(
         fs,
         pkgjson,
-        viteconf
+        viteconf,
+        tailwindconf
     )
 
     fill_framework(spec, artifact)
     fill_langconfig(spec, artifact)
+    fill_tailwind(spec, artifact)
 
     with artifact.fs.open('package.json', 'w') as f:
         f.write(artifact.pkgjson.compile_str())
 
     with artifact.fs.open(spec.language.file('vite.config'), 'w') as f:
         f.write(artifact.viteconf.get())
+
+    with artifact.fs.open(spec.language.file('tailwind.config'), 'w') as f:
+        f.write(artifact.tailwindconf.get())
 
     dirpath = Path(output_path)
 
@@ -140,7 +147,6 @@ def fill_framework(spec: AppSpec, artifact: Artifact):
 # ----------------------------------------------
 # ----------------------------------------------
 
-
 def fill_langconfig(spec: AppSpec, artifact: Artifact):
 
     source_path = "webtrap/skel/react"
@@ -157,3 +163,12 @@ def fill_langconfig(spec: AppSpec, artifact: Artifact):
             artifact.fs,
             file
         )
+
+# ----------------------------------------------
+# ----------------------------------------------
+# ----------------------------------------------
+# ----------------------------------------------
+# ----------------------------------------------
+
+def fill_tailwind(spec: AppSpec, artifact: Artifact):
+    pass

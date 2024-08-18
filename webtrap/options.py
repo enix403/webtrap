@@ -4,7 +4,7 @@ from fs.memoryfs import MemoryFS
 
 
 from .manifest import PackageManifest
-from .printers import ViteConfigPrinter
+from .printers import TailwindConfigPrinter, ViteConfigPrinter
 
 class Framework(Enum):
     React = 'React'
@@ -52,3 +52,4 @@ class Artifact:
     fs: MemoryFS
     pkgjson: PackageManifest
     viteconf: ViteConfigPrinter
+    tailwindconf: TailwindConfigPrinter

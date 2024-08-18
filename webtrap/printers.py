@@ -1,4 +1,4 @@
-from typing import override
+from typing import Any, override
 
 from webtrap.jsobject import JSArray, JSNumber, JSObject, JSRaw
 
@@ -67,11 +67,17 @@ class Printer:
 # ================================================
 
 class JSPrinter(Printer):
+    def __init__(self):
+        super().__init__()
+        self.has_imports = False
+
     def add_import(self, items: str, loc: str):
         self.add_line(f'import {items} from \"{loc}\";')
+        self.has_imports = True
 
     def add_effect_import(self, loc: str):
         self.add_line(f'import \"{loc}\";')
+        self.has_imports = True
 
 # ================================================
 
@@ -79,8 +85,6 @@ class ViteConfigPrinter(JSPrinter):
     def __init__(self):
         super().__init__()
         self.plugins: list[str] = []
-
-        self.add_import("{ defineConfig }", "vite")
 
     def add_plugin(self, plugin: str, index: int | None = None):
         insert_index = len(self.plugins) if index is None else index
@@ -99,11 +103,11 @@ class ViteConfigPrinter(JSPrinter):
 
     @override
     def get(self):
-        configjson = self.compile().output(2)
+        js_object = self.compile().output(2)
 
         self.add_newline()
         self.add_pulled(f"""
-            export default defineConfig({configjson});
+            export default defineConfig({js_object});
         """)
 
         return super().get()
@@ -113,9 +117,11 @@ class ViteConfigPrinter(JSPrinter):
 class TailwindConfigPrinter(JSPrinter):
     def __init__(self):
         super().__init__()
+        self.content: list[str] = []
         self.plugins: list[str] = []
 
-        self.add_import("{ defineConfig }", "vite")
+    def add_content(self, item: str):
+        self.content.append(item)
 
     def add_plugin(self, plugin: str, index: int | None = None):
         insert_index = len(self.plugins) if index is None else index
@@ -123,22 +129,21 @@ class TailwindConfigPrinter(JSPrinter):
 
     def compile(self) -> JSObject:
         return JSObject({
+            'content': self.content,
             'plugins': [JSRaw(p) for p in self.plugins],
-            'define': {
-                'process.env': {}
-            },
-            'server': {
-                'port': 4200
-            }
         })
 
     @override
     def get(self):
-        configjson = self.compile().output(2)
+        js_object = self.compile().output(2)
 
-        self.add_newline()
+        # if self.has_imports:
+        # self.add_newline()
+
         self.add_pulled(f"""
-            export default defineConfig({configjson});
+            /** @type {{import('tailwindcss').Config}} */
+            export default {js_object};
         """)
 
         return super().get()
+
