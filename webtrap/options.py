@@ -25,6 +25,12 @@ class Langauge(Enum):
     def file_jsx(self, name: str):
         ext = "jsx" if self is self.Js else 'tsx'
         return f'{name}.{ext}'
+    
+    def null_assert(self, expr: str):
+        if self is self.Ts:
+            return expr + "!"
+        else:
+            return expr
 
 class PackageManager(Enum):
     Pnpm = 'pnpm'

@@ -16,7 +16,7 @@ from webtrap.printers import (
 
 def buildup(spec: AppSpec, output_path: str):
     fs = MemoryFS()
-    pkgjson = PackageManifest('my-app')
+    pkgjson = PackageManifest(spec.pkg_name)
     viteconf = ViteConfigPrinter()
 
     artifact = Artifact(
@@ -70,6 +70,7 @@ def fill_framework(spec: AppSpec, artifact: Artifact):
     artifact.pkgjson.add_script("dev", "vite")
     if spec.language is Langauge.Ts:
         artifact.pkgjson.add_script("build", "tsc -b && vite build")
+        artifact.pkgjson.add_script("typecheck", "tsc --noEmit")
     else:
         artifact.pkgjson.add_script("build", "vite build")
     artifact.pkgjson.add_script("preview", "vite preview")
@@ -91,9 +92,9 @@ def fill_framework(spec: AppSpec, artifact: Artifact):
 
         p.add_newline()
 
-        p.add_pulled("""
+        p.add_pulled(f"""
         const root = document.getElementById('root');
-        createRoot(root).render(<App />);
+        createRoot({spec.language.null_assert("root")}).render(<App />);
         """)
         f.write(p.get())
 
