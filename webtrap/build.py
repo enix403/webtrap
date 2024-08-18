@@ -29,12 +29,14 @@ def buildup(spec: AppSpec):
     with artifact.fs.open(spec.language.file('vite.config'), 'w') as f:
         f.write(artifact.viteconf.get())
 
-    with open_fs('generated') as target:
+    with open_fs('generated/react') as target:
         target.removetree('/') # empty the directory
         copy_fs(artifact.fs, target)
 
 def fill_framework(spec: AppSpec, artifact: Artifact):
     assert(spec.framework is Framework.React)
+
+    artifact.pkgjson.add_extra('type', 'module')
 
     artifact.pkgjson.add_dep('react', '^18.3.1')
     artifact.pkgjson.add_dep('react-dom', '^18.3.1')

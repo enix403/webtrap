@@ -1,4 +1,5 @@
 import json
+from typing import Any
 import requests
 
 def npm_package_latest_version(name: str):
@@ -21,35 +22,40 @@ class PackageManifest:
         self.scripts: list[tuple[str, str]] = []
         self.deps: dict[str, str] = {}
         self.dev_deps: dict[str, str] = {}
+        self.extras: dict[str, Any] = {}
 
     def add_script(self, name: str, command: str):
         self.scripts.append((name, command))
 
-    def remove_script(self, name: str):
-        for i, (script_name, _) in enumerate(self.scripts):
-            if name == script_name:
-                self.scripts.pop(i)
-                break
+    # def remove_script(self, name: str):
+    #     for i, (script_name, _) in enumerate(self.scripts):
+    #         if name == script_name:
+    #             self.scripts.pop(i)
+    #             break
 
     def add_dep(self, name: str, version: str):
         self.deps[name] = version
 
-    def remove_dep(self, name: str):
-        if name in self.deps:
-            del self.deps[name]
+    # def remove_dep(self, name: str):
+    #     if name in self.deps:
+    #         del self.deps[name]
 
     def add_dev_dep(self, name: str, version: str):
         self.dev_deps[name] = version
 
-    def remove_dev_dep(self, name: str):
-        if name in self.dev_deps:
-            del self.dev_deps[name]
+    # def remove_dev_dep(self, name: str):
+    #     if name in self.dev_deps:
+    #         del self.dev_deps[name]
+
+    def add_extra(self, name: str, value: Any):
+        self.extras[name] = value
 
     def compile(self):
         data = {
             'name': self.name,
             'version': '1.0.0',
             'private': True,
+            **self.extras,
         }
 
         if len(self.scripts) > 0:
