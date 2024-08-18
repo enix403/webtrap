@@ -1,10 +1,11 @@
 from beaupy import prompt
 from caseconverter import kebabcase
+from requests.models import parse_header_links
 
-from webtrap.appspec import AppSpec
-from webtrap.features import framework as fr
-from webtrap.features import langauge as ln
-from webtrap.features import pkg_manager as pkm
+from webtrap.options import AppSpec
+from webtrap.options import Framework
+from webtrap.options import Langauge
+from webtrap.options import PackageManager
 
 from webtrap.common import select_enum
 from webtrap.build import buildup
@@ -18,15 +19,15 @@ def input_spec():
     )
 
     # Framework
-    framework = select_enum(fr.Framework, 'Choose your framework:')
+    framework = select_enum(Framework, 'Choose your framework:')
     # print(framework)
 
     # Language
-    language = select_enum(ln.Langauge, 'Choose your langauge:')
+    language = select_enum(Langauge, 'Choose your langauge:')
     # print(lang)
 
     # Package Manager
-    pkg_manager = select_enum(pkm.PackageManager, 'Choose your package manager:')
+    pkg_manager = select_enum(PackageManager, 'Choose your package manager:')
     # print(pkg_manager)
 
     spec = AppSpec(
@@ -40,7 +41,14 @@ def input_spec():
     return spec
 
 def start():
-    spec = input_spec()
+    # spec = input_spec()
+    spec = AppSpec(
+        app_name="Dummy App",
+        pkg_name="dummy-app",
+        framework=Framework.React,
+        language=Langauge.Ts,
+        pkg_manager=PackageManager.Pnpm
+    )
     buildup(spec)
 
 

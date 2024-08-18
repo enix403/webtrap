@@ -2,8 +2,7 @@ from fs import open_fs
 from fs.memoryfs import MemoryFS
 from fs.copy import copy_fs
 
-from webtrap.appspec import AppSpec, Artifact
-from webtrap.features.framework import fr_fill_artifact
+from webtrap.options import AppSpec, Artifact
 from webtrap.manifest import PackageManifest
 
 def buildup(spec: AppSpec):
@@ -20,3 +19,7 @@ def buildup(spec: AppSpec):
     with open_fs('generated') as target:
         target.removetree('/') # empty the directory
         copy_fs(artifact.fs, target)
+        
+        
+def fr_fill_artifact(spec: AppSpec, artifact: Artifact):
+    pass
