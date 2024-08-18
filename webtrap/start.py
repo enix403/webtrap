@@ -8,11 +8,6 @@ from webtrap.features import pkg_manager as pkm
 
 from webtrap.common import select_enum
 
-# @dataclass
-# class AppSpec:
-#     pkg_manager: PackageManager
-#     framework: Framework
-
 def start():
     pass
     # Metadeta
