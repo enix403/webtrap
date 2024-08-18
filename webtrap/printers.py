@@ -27,6 +27,9 @@ class Printer:
     def __init__(self):
         self.buf = ''
 
+    def get(self):
+        return self.buf
+
     def add_line(self, line: str):
         self.buf += line + '\n'
 
