@@ -9,6 +9,7 @@ from webtrap.options import PackageManager
 
 from webtrap.common import select_enum
 from webtrap.build import buildup
+from webtrap.printers import pullback
 
 def input_spec():
     # Metadeta
