@@ -49,6 +49,7 @@ class PackageManifest:
         data = {
             'name': self.name,
             'version': '1.0.0',
+            'private': True,
         }
 
         if len(self.scripts) > 0:
@@ -62,5 +63,8 @@ class PackageManifest:
 
         return data
 
+    def compile_str(self):
+        return json.dumps(self.compile(), indent=2)
+
     def display(self):
-        print(json.dumps(self.compile(), indent=2))
+        print(self.compile_str())

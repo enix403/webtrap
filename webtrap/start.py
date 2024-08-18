@@ -7,9 +7,13 @@ from webtrap.features import langauge as ln
 from webtrap.features import pkg_manager as pkm
 
 from webtrap.common import select_enum
+from webtrap.build import buildup
 
 def start():
     pass
+
+    buildup()
+
     # Metadeta
     # app_name = prompt("What is your app's name?")
     # package_name = prompt(
