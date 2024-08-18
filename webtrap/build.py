@@ -10,7 +10,7 @@ from webtrap.options import AppSpec, Artifact, Framework, Langauge
 from webtrap.manifest import PackageManifest
 from webtrap.printers import (
     Printer,
-    JSFilePrinter,
+    JSPrinter,
     ViteConfigPrinter,
 )
 
@@ -85,7 +85,7 @@ def fill_framework(spec: AppSpec, artifact: Artifact):
 
     mainfile_name = spec.language.file_jsx("main")
     with src.open(mainfile_name, 'w') as f:
-        p = JSFilePrinter()
+        p = JSPrinter()
 
         p.add_import("{ createRoot }", 'react-dom/client')
         p.add_import("{ App }", './App')
@@ -99,7 +99,7 @@ def fill_framework(spec: AppSpec, artifact: Artifact):
         f.write(p.get())
 
     with src.open(spec.language.file_jsx("App"), 'w') as f:
-        p = JSFilePrinter()
+        p = JSPrinter()
         p.add_pulled("""
         export function App() {
           return (

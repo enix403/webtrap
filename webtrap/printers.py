@@ -1,4 +1,3 @@
-import json
 from typing import override
 
 from webtrap.jsobject import JSArray, JSNumber, JSObject, JSRaw
@@ -44,6 +43,8 @@ def wrap_indent(content: str, start: str, end: str, indent=2):
         + end + '\n'
     )
 
+# ================================================
+
 class Printer:
     def __init__(self):
         self.buf = ''
@@ -63,15 +64,55 @@ class Printer:
     def add_pulled(self, content: str):
         self.add_chunk(pullback(content))
 
-class JSFilePrinter(Printer):
+# ================================================
+
+class JSPrinter(Printer):
     def add_import(self, items: str, loc: str):
         self.add_line(f'import {items} from \"{loc}\";')
 
     def add_effect_import(self, loc: str):
         self.add_line(f'import \"{loc}\";')
 
+# ================================================
 
-class ViteConfigPrinter(JSFilePrinter):
+class ViteConfigPrinter(JSPrinter):
+    def __init__(self):
+        super().__init__()
+        self.plugins: list[str] = []
+
+        self.add_import("{ defineConfig }", "vite")
+
+    def add_plugin(self, plugin: str, index: int | None = None):
+        insert_index = len(self.plugins) if index is None else index
+        self.plugins.insert(insert_index, plugin)
+
+    def compile(self) -> JSObject:
+        return JSObject(
+            plugins=JSArray([
+                JSRaw(p) for p in self.plugins
+            ]),
+            define=JSObject(**{
+                'process.env': JSObject()
+            }),
+            server=JSObject(
+                port=JSNumber(4200)
+            )
+        )
+
+    @override
+    def get(self):
+        configjson = self.compile().output(2)
+
+        self.add_newline()
+        self.add_pulled(f"""
+            export default defineConfig({configjson});
+        """)
+
+        return super().get()
+
+# ================================================
+
+class TailwindConfigPrinter(JSPrinter):
     def __init__(self):
         super().__init__()
         self.plugins: list[str] = []
