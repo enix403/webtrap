@@ -2,7 +2,7 @@ from fs import open_fs
 from fs.memoryfs import MemoryFS
 from fs.copy import copy_fs
 
-from webtrap.options import AppSpec, Artifact
+from webtrap.options import AppSpec, Artifact, Framework
 from webtrap.manifest import PackageManifest
 
 def buildup(spec: AppSpec):
@@ -11,7 +11,7 @@ def buildup(spec: AppSpec):
 
     artifact = Artifact(fs, pkgjson)
 
-    fr_fill_artifact(spec, artifact)
+    fill_framework(spec, artifact)
 
     with artifact.fs.open('package.json', 'w') as f:
         f.write(artifact.pkgjson.compile_str())
@@ -19,7 +19,15 @@ def buildup(spec: AppSpec):
     with open_fs('generated') as target:
         target.removetree('/') # empty the directory
         copy_fs(artifact.fs, target)
-        
-        
-def fr_fill_artifact(spec: AppSpec, artifact: Artifact):
-    pass
+
+def fill_framework(spec: AppSpec, artifact: Artifact):
+    assert(spec.framework is Framework.React)
+
+    artifact.fs.makedir("src")
+    src = artifact.fs.opendir('src')
+
+    with src.open(spec.language.file_jsx("main"), 'w') as f:
+        f.write("main")
+
+    with src.open(spec.language.file_jsx("App"), 'w') as f:
+        f.write("App")
