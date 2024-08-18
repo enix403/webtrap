@@ -3,7 +3,7 @@ from pathlib import Path
 
 from fs import open_fs
 from fs.memoryfs import MemoryFS
-from fs.copy import copy_fs
+from fs.copy import copy_fs, copy_file
 
 
 from webtrap.options import AppSpec, Artifact, Framework, Langauge
@@ -26,6 +26,7 @@ def buildup(spec: AppSpec, output_path: str):
     )
 
     fill_framework(spec, artifact)
+    fill_langconfig(spec, artifact)
 
     with artifact.fs.open('package.json', 'w') as f:
         f.write(artifact.pkgjson.compile_str())
@@ -132,5 +133,26 @@ def fill_framework(spec: AppSpec, artifact: Artifact):
         f.write(p.get())
 
 
-def fill_tsconfig(spec: AppSpec, artifact: Artifact):
-    pass
+# ----------------------------------------------
+# ----------------------------------------------
+# ----------------------------------------------
+# ----------------------------------------------
+# ----------------------------------------------
+
+
+def fill_langconfig(spec: AppSpec, artifact: Artifact):
+
+    source_path = "webtrap/skel/react"
+    files = [
+        "tsconfig.app.json",
+        "tsconfig.node.json",
+        "tsconfig.json",
+    ]
+
+    for file in files:
+        copy_file(
+            source_path,
+            file,
+            artifact.fs,
+            file
+        )
