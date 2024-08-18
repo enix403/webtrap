@@ -1,7 +1,10 @@
 import os
+import shutil
+
 from fs import open_fs
 from fs.memoryfs import MemoryFS
 from fs.copy import copy_fs
+
 
 from webtrap.options import AppSpec, Artifact, Framework, Langauge
 from webtrap.manifest import PackageManifest
@@ -30,8 +33,8 @@ def buildup(spec: AppSpec):
     with artifact.fs.open(spec.language.file('vite.config'), 'w') as f:
         f.write(artifact.viteconf.get())
 
+    shutil.rmtree('generated/react') # empty the directory
     with open_fs('generated/react') as target:
-        target.removetree('/') # empty the directory
         copy_fs(artifact.fs, target)
 
     # os.symlink(
