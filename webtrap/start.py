@@ -58,9 +58,9 @@ def start():
         framework=Framework.React,
         language=Langauge.Ts,
         pkg_manager=PackageManager.Pnpm,
-        tw=None
+        tw=TailwindSpec([TailwindSpec.PG_BREAKPOINTS_INSPECTOR, TailwindSpec.PG_RIPPLE_UI])
     )
-    spec = input_spec()
+    # spec = input_spec()
 
     output_path = "generated/react"
 

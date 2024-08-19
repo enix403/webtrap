@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, override
 from webtrap.framework.base import STYLESHEET_APP, STYLESHEET_RESET
 from webtrap.jsobject import JSObject, JSRaw
+from webtrap.options import TailwindSpec
 from webtrap.printers import JSPrinter
 
 if TYPE_CHECKING:
@@ -42,12 +43,29 @@ class TailwindConfigPrinter(JSPrinter):
 
 
 def fill_tailwind(spec: AppSpec, artifact: Artifact):
+    assert spec.tw is not None
+
     artifact.pkgjson.add_dev_dep('tailwindcss', '^3.3.3')
     artifact.pkgjson.add_dev_dep('postcss', '^8.4.38')
     artifact.pkgjson.add_dev_dep('autoprefixer', '^10.4.15')
 
     artifact.tailwindconf.add_content("./index.html")
     artifact.tailwindconf.add_content("./src/**/*.{js,ts,jsx,tsx}")
+
+    for p in spec.tw.plugins:
+        if p == TailwindSpec.PG_BREAKPOINTS_INSPECTOR:
+            artifact.pkgjson.add_dev_dep(
+                'tailwindcss-breakpoints-inspector',
+                '^1.1.0'
+            )
+            artifact.tailwindconf.add_plugin(
+                "require('tailwindcss-breakpoints-inspector')"
+            )
+        elif p == TailwindSpec.PG_RIPPLE_UI:
+            artifact.pkgjson.add_dev_dep('rippleui', '^1.12.1')
+            artifact.tailwindconf.add_plugin(
+                "require('rippleui')"
+            )
 
     with artifact.fs.open('postcss.config.js', 'w') as f:
         p = JSPrinter()

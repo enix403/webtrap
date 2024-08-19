@@ -1,12 +1,14 @@
+from __future__ import annotations
+
 from enum import Enum
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from fs.memoryfs import MemoryFS
 
-from webtrap.features.tailwind import TailwindConfigPrinter
-from webtrap.framework.base import BaseFramework
-
-from .manifest import PackageManifest
+if TYPE_CHECKING:
+    from .features.tailwind import TailwindConfigPrinter
+    from .framework.base import BaseFramework
+    from .manifest import PackageManifest
 
 
 class Framework(Enum):
