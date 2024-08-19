@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, override
-from webtrap.framework.base import STYLESHEET_RESET
+from webtrap.framework.base import STYLESHEET_APP, STYLESHEET_RESET
 from webtrap.jsobject import JSObject, JSRaw
 from webtrap.printers import JSPrinter
 
@@ -62,9 +62,13 @@ def fill_tailwind(spec: AppSpec, artifact: Artifact):
         f.write(p.get())
 
 
-    stylesheet = artifact.framework.add_style('tailwind.css', STYLESHEET_RESET)
-    stylesheet.add_pulled("""
+    reset = artifact.framework.add_style('tailwind-reset.css', STYLESHEET_RESET)
+    reset.add_pulled("""
     @tailwind base;
+    """)
+
+    content = artifact.framework.add_style('tailwind-content.css', STYLESHEET_APP)
+    content.add_pulled("""
     @tailwind components;
     @tailwind utilities;
     """)
