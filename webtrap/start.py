@@ -75,7 +75,8 @@ def start():
         framework=Framework.React,
         language=Langauge.Ts,
         pkg_manager=PackageManager.Pnpm,
-        tw=TailwindSpec([TailwindSpec.PG_BREAKPOINTS_INSPECTOR, TailwindSpec.PG_RIPPLE_UI])
+        tw=TailwindSpec([TailwindSpec.PG_BREAKPOINTS_INSPECTOR, TailwindSpec.PG_RIPPLE_UI]),
+        prettier=PrettierSpec([PrettierSpec.PG_TAILWINDCSS])
     )
     # spec = input_spec()
 
