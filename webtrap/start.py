@@ -1,6 +1,5 @@
 from beaupy import prompt
 from caseconverter import kebabcase
-from requests.models import parse_header_links
 
 from webtrap.options import AppSpec
 from webtrap.options import Framework
@@ -9,7 +8,6 @@ from webtrap.options import PackageManager
 
 from webtrap.common import select_enum
 from webtrap.build import buildup
-from webtrap.printers import pullback
 
 def input_spec():
     # Metadeta
