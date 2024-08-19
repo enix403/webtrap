@@ -27,15 +27,18 @@ def buildup(spec: AppSpec, output_path: str):
 
     framework.create(spec, artifact)
     fill_langconfig(spec, artifact)
-    fill_tailwind(spec, artifact)
-    fill_prettier(spec, artifact)
+    if spec.tw:
+        fill_tailwind(spec, artifact)
+    if spec.prettier:
+        fill_prettier(spec, artifact)
     framework.finalize(spec, artifact)
 
     with artifact.fs.open('package.json', 'w') as f:
         f.write(artifact.pkgjson.compile_str())
 
-    with artifact.fs.open(spec.language.file('tailwind.config'), 'w') as f:
-        f.write(artifact.tailwindconf.get())
+    if spec.tw:
+        with artifact.fs.open(spec.language.file('tailwind.config'), 'w') as f:
+            f.write(artifact.tailwindconf.get())
 
     dirpath = Path(output_path)
 

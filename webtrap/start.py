@@ -46,7 +46,7 @@ def input_spec():
 
     pt_enabled = bool(confirm("Do you want to add prettier?", default_is_yes=True))
     if pt_enabled:
-        available = PrettierSpec.get_available_plugins()
+        available = PrettierSpec.get_available_plugins(tw_spec)
         selected_plugins: list[str] = []
 
         if available:
@@ -78,7 +78,7 @@ def start():
         tw=TailwindSpec([TailwindSpec.PG_BREAKPOINTS_INSPECTOR, TailwindSpec.PG_RIPPLE_UI]),
         prettier=PrettierSpec([PrettierSpec.PG_TAILWINDCSS])
     )
-    # spec = input_spec()
+    spec = input_spec()
 
     output_path = "generated/react"
 
