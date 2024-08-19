@@ -9,8 +9,7 @@ from .vite import ViteConfigPrinter
 
 
 class ReactFramework(BaseFramework):
-    def finalize(self, spec: AppSpec, artifact: Artifact):
-        assert(spec.framework is Framework.React)
+    def create(self, spec: AppSpec, artifact: Artifact):
 
         artifact.pkgjson.add_extra('type', 'module')
 
@@ -41,8 +40,11 @@ class ReactFramework(BaseFramework):
         with artifact.fs.open(spec.language.file('vite.config'), 'w') as f:
             f.write(viteconf.get())
 
-        artifact.fs.makedir("src")
-        src = artifact.fs.opendir('src')
+        self.src = artifact.fs.makedir("src")
+        self.styles = artifact.fs.makedirs('src/styles')
+
+    def finalize(self, spec: AppSpec, artifact: Artifact):
+        src = self.src
 
         mainfile_name = spec.language.file_jsx("main")
         with src.open(mainfile_name, 'w') as f:

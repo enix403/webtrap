@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from webtrap.options import Artifact, AppSpec
 
 class BaseFramework:
-    def __init__(self):
+    def create(self, spec: AppSpec, artifact: Artifact):
         pass
 
     def add_import(self):

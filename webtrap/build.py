@@ -24,7 +24,7 @@ def buildup(spec: AppSpec, output_path: str):
         tailwindconf
     )
 
-    # fill artifact
+    framework.create(spec, artifact)
     fill_langconfig(spec, artifact)
     fill_tailwind(spec, artifact)
     framework.finalize(spec, artifact)
