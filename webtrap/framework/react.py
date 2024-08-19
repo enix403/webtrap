@@ -61,7 +61,6 @@ class ReactFramework(BaseFramework):
             """)
             f.write(p.get())
 
-        STYLES_DIR = 'styles'
         sorted_styles = sorted(self.styles, key=lambda style: style.priority)
 
         for stylesheet in sorted_styles:
@@ -71,7 +70,10 @@ class ReactFramework(BaseFramework):
             p = JSPrinter()
             
             for stylesheet in sorted_styles:
-                p.add_effect_import(STYLES_DIR + '/' + stylesheet.name)
+                p.add_effect_import('./styles/' + stylesheet.name)
+
+            if sorted_styles:
+                p.add_newline()
 
             p.add_pulled("""
             export function App() {

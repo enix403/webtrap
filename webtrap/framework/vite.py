@@ -6,6 +6,7 @@ class ViteConfigPrinter(JSPrinter):
     def __init__(self):
         super().__init__()
         self.plugins: list[str] = []
+        self.add_import('{ defineConfig }', 'vite')
 
     def add_plugin(self, plugin: str, index: int | None = None):
         insert_index = len(self.plugins) if index is None else index
