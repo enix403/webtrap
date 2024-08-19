@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, override
+from webtrap.framework.base import STYLESHEET_RESET
 from webtrap.jsobject import JSObject, JSRaw
 from webtrap.printers import JSPrinter
 
@@ -40,7 +41,6 @@ class TailwindConfigPrinter(JSPrinter):
         return super().get()
 
 
-
 def fill_tailwind(spec: AppSpec, artifact: Artifact):
     artifact.pkgjson.add_dev_dep('tailwindcss', '^3.3.3')
     artifact.pkgjson.add_dev_dep('postcss', '^8.4.38')
@@ -60,3 +60,11 @@ def fill_tailwind(spec: AppSpec, artifact: Artifact):
         };
         """)
         f.write(p.get())
+
+
+    stylesheet = artifact.framework.add_style('tailwind.css', STYLESHEET_RESET)
+    stylesheet.add_pulled("""
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+    """)

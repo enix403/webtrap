@@ -9,9 +9,10 @@ if TYPE_CHECKING:
 
 
 STYLESHEET_RESET = 0
-STYLESHEET_LIBRARY = 1
-STYLESHEET_OVERRIDE = 2
+STYLESHEET_FONT = 1
+STYLESHEET_LIBRARY = 2
 STYLESHEET_APP = 3
+STYLESHEET_OVERRIDE = 4
 
 class StyleSheet(Printer):
     def __init__(self, name: str, priority: int):
@@ -24,7 +25,7 @@ class BaseFramework:
     def __init__(self) -> None:
         # self.imports: list[tuple[str, str]] = []
         # self.effect_imports: list[str] = []
-        self.styles = []
+        self.styles: list[StyleSheet] = []
 
     def create(self, spec: AppSpec, artifact: Artifact):
         pass

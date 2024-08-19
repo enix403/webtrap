@@ -40,11 +40,11 @@ class ReactFramework(BaseFramework):
         with artifact.fs.open(spec.language.file('vite.config'), 'w') as f:
             f.write(viteconf.get())
 
-        self.src = artifact.fs.makedir("src")
-        self.styles = artifact.fs.makedirs('src/styles')
+        self.src_fs = artifact.fs.makedir("src")
+        self.styles_fs = artifact.fs.makedirs('src/styles')
 
     def finalize(self, spec: AppSpec, artifact: Artifact):
-        src = self.src
+        src = self.src_fs
 
         mainfile_name = spec.language.file_jsx("main")
         with src.open(mainfile_name, 'w') as f:
@@ -61,8 +61,18 @@ class ReactFramework(BaseFramework):
             """)
             f.write(p.get())
 
+        STYLES_DIR = 'styles'
+        sorted_styles = sorted(self.styles, key=lambda style: style.priority)
+
+        for stylesheet in sorted_styles:
+            self.styles_fs.writetext(stylesheet.name, stylesheet.get())
+
         with src.open(spec.language.file_jsx("App"), 'w') as f:
             p = JSPrinter()
+            
+            for stylesheet in sorted_styles:
+                p.add_effect_import(STYLES_DIR + '/' + stylesheet.name)
+
             p.add_pulled("""
             export function App() {
               return (
