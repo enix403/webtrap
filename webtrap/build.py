@@ -37,8 +37,6 @@ def buildup(spec: AppSpec, output_path: str):
     with artifact.fs.open(spec.language.file('tailwind.config'), 'w') as f:
         f.write(artifact.tailwindconf.get())
 
-    return
-
     dirpath = Path(output_path)
 
     if dirpath.is_dir():
