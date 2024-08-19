@@ -1,7 +1,3 @@
-from typing import Any, override
-
-from webtrap.jsobject import JSObject, JSRaw
-
 def get_indent(line: str):
     return len(line[:-len(line.lstrip())])
 
@@ -64,7 +60,6 @@ class Printer:
         self.add_line('')
 
     def add_pulled(self, content: str):
-        # print(pullback(content))
         self.add_chunk(pullback(content))
 
 # ================================================
@@ -81,72 +76,3 @@ class JSPrinter(Printer):
     def add_effect_import(self, loc: str):
         self.add_line(f'import \"{loc}\";')
         self.has_imports = True
-
-# ================================================
-
-class ViteConfigPrinter(JSPrinter):
-    def __init__(self):
-        super().__init__()
-        self.plugins: list[str] = []
-
-    def add_plugin(self, plugin: str, index: int | None = None):
-        insert_index = len(self.plugins) if index is None else index
-        self.plugins.insert(insert_index, plugin)
-
-    def compile(self) -> JSObject:
-        return JSObject({
-            'plugins': [JSRaw(p) for p in self.plugins],
-            'define': {
-                'process.env': {}
-            },
-            'server': {
-                'port': 4200
-            }
-        })
-
-    @override
-    def get(self):
-        js_object = self.compile().output(2)
-
-        self.add_newline()
-        self.add_pulled(f"""
-            export default defineConfig({js_object});
-        """)
-
-        return super().get()
-
-# ================================================
-
-class TailwindConfigPrinter(JSPrinter):
-    def __init__(self):
-        super().__init__()
-        self.content: list[str] = []
-        self.plugins: list[str] = []
-
-    def add_content(self, item: str):
-        self.content.append(item)
-
-    def add_plugin(self, plugin: str, index: int | None = None):
-        insert_index = len(self.plugins) if index is None else index
-        self.plugins.insert(insert_index, plugin)
-
-    def compile(self) -> JSObject:
-        return JSObject({
-            'content': self.content,
-            'plugins': [JSRaw(p) for p in self.plugins],
-        })
-
-    @override
-    def get(self):
-        js_object = self.compile().output(2)
-
-        if self.has_imports:
-            self.add_newline()
-
-        self.add_pulled(f"""
-        /** @type {{import('tailwindcss').Config}} */
-        export default {js_object};
-        """)
-
-        return super().get()
-

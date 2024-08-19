@@ -2,9 +2,11 @@ from enum import Enum
 from dataclasses import dataclass
 from fs.memoryfs import MemoryFS
 
+from webtrap.features.tailwind import TailwindConfigPrinter
+from webtrap.framework.base import BaseFramework
 
 from .manifest import PackageManifest
-from .printers import TailwindConfigPrinter, ViteConfigPrinter
+
 
 class Framework(Enum):
     React = 'React'
@@ -51,5 +53,6 @@ class AppSpec:
 class Artifact:
     fs: MemoryFS
     pkgjson: PackageManifest
-    viteconf: ViteConfigPrinter
+    framework: BaseFramework
+    # viteconf: ViteConfigPrinter
     tailwindconf: TailwindConfigPrinter
