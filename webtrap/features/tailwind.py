@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, override
 from webtrap.framework.base import STYLESHEET_APP, STYLESHEET_RESET
 from webtrap.jsobject import JSObject, JSRaw
 from webtrap.options import TailwindSpec
-from webtrap.printers import JSPrinter
+from webtrap.printers import JSPrinter, pullback
 
 if TYPE_CHECKING:
     from webtrap.options import AppSpec, Artifact
@@ -64,7 +64,12 @@ def fill_tailwind(spec: AppSpec, artifact: Artifact):
         elif p == TailwindSpec.PG_RIPPLE_UI:
             artifact.pkgjson.add_dev_dep('rippleui', '^1.12.1')
             artifact.tailwindconf.add_plugin(
-                "require('rippleui')"
+                pullback("""
+                require('rippleui')({
+                  defaultStyle: false,
+                  removeThemes: ['dark']
+                })
+                """)
             )
 
     with artifact.fs.open('postcss.config.js', 'w') as f:
