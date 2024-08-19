@@ -1,5 +1,6 @@
 from enum import Enum
 from dataclasses import dataclass
+from typing import Optional
 from fs.memoryfs import MemoryFS
 
 from webtrap.features.tailwind import TailwindConfigPrinter
@@ -39,6 +40,19 @@ class PackageManager(Enum):
     Yarn = 'yarn'
     Npm = 'npm'
 
+class TailwindSpec:
+    PG_BREAKPOINTS_INSPECTOR = 'tailwindcss-breakpoints-inspector'
+    PG_RIPPLE_UI = 'rippleui'
+
+    def __init__(self, plugins: list[str]) -> None:
+        self.plugins = plugins
+
+    @classmethod
+    def get_available_plugins(cls):
+        return [
+            cls.PG_BREAKPOINTS_INSPECTOR,
+            cls.PG_RIPPLE_UI
+        ]
 
 @dataclass
 class AppSpec:
@@ -47,6 +61,7 @@ class AppSpec:
     framework: Framework
     language: Langauge
     pkg_manager: PackageManager
+    tw: Optional[TailwindSpec]
 
     def is_ts(self):
         return self.language is Langauge.Ts
@@ -57,5 +72,4 @@ class Artifact:
     fs: MemoryFS
     pkgjson: PackageManifest
     framework: BaseFramework
-    # viteconf: ViteConfigPrinter
     tailwindconf: TailwindConfigPrinter

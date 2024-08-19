@@ -1,7 +1,7 @@
-from beaupy import prompt
+from beaupy import confirm, prompt, select_multiple
 from caseconverter import kebabcase
 
-from webtrap.options import AppSpec
+from webtrap.options import AppSpec, TailwindSpec
 from webtrap.options import Framework
 from webtrap.options import Langauge
 from webtrap.options import PackageManager
@@ -29,12 +29,24 @@ def input_spec():
     pkg_manager = select_enum(PackageManager, 'Choose your package manager:')
     # print(pkg_manager)
 
+    # Tailwind
+    tw_spec: TailwindSpec | None = None
+    tw_enabled = bool(confirm("Do you want to add tailwind?", default_is_yes=True))
+    if tw_enabled:
+        print("Choose any tailwind plugins you want:")
+        selected_plugins: list[str] = select_multiple(
+            TailwindSpec.get_available_plugins()
+        )
+        tw_spec = TailwindSpec(selected_plugins)
+
+    # Combine all inputs
     spec = AppSpec(
         app_name=app_name,
         pkg_name=pkg_name,
         framework=framework,
         language=language,
         pkg_manager=pkg_manager,
+        tw=tw_spec
     )
 
     return spec
@@ -45,7 +57,8 @@ def start():
         pkg_name="dummy-app",
         framework=Framework.React,
         language=Langauge.Ts,
-        pkg_manager=PackageManager.Pnpm
+        pkg_manager=PackageManager.Pnpm,
+        tw=None
     )
     spec = input_spec()
 

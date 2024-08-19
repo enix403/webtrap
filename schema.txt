@@ -19,7 +19,7 @@ langauge
   ts
   
 tailwind: (and plugins)
-  breakpoint inspector
+  tailwindcss-breakpoints-inspector
   ripple-ui
 
 prettier:
