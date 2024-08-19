@@ -1,7 +1,7 @@
 from beaupy import confirm, prompt, select_multiple
 from caseconverter import kebabcase
 
-from webtrap.options import AppSpec, TailwindSpec
+from webtrap.options import AppSpec, PrettierSpec, TailwindSpec
 from webtrap.options import Framework
 from webtrap.options import Langauge
 from webtrap.options import PackageManager
@@ -31,13 +31,29 @@ def input_spec():
 
     # Tailwind
     tw_spec: TailwindSpec | None = None
+
     tw_enabled = bool(confirm("Do you want to add tailwind?", default_is_yes=True))
     if tw_enabled:
         print("Choose any tailwind plugins you want:")
         selected_plugins: list[str] = select_multiple(
             TailwindSpec.get_available_plugins()
         )
+        
         tw_spec = TailwindSpec(selected_plugins)
+
+    # Prettier
+    pt_spec: PrettierSpec | None = None
+
+    pt_enabled = bool(confirm("Do you want to add prettier?", default_is_yes=True))
+    if pt_enabled:
+        available = PrettierSpec.get_available_plugins()
+        selected_plugins: list[str] = []
+
+        if available:
+            print("Choose any prettier plugins you want:")
+            selected_plugins: list[str] = select_multiple(available)
+
+        pt_spec = PrettierSpec(selected_plugins)
 
     # Combine all inputs
     spec = AppSpec(
@@ -46,7 +62,8 @@ def input_spec():
         framework=framework,
         language=language,
         pkg_manager=pkg_manager,
-        tw=tw_spec
+        tw=tw_spec,
+        prettier=pt_spec
     )
 
     return spec

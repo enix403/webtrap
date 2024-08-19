@@ -56,6 +56,18 @@ class TailwindSpec:
             cls.PG_RIPPLE_UI
         ]
 
+class PrettierSpec:
+    PG_TAILWINDCSS = 'prettier-plugin-tailwindcss'
+
+    def __init__(self, plugins: list[str]) -> None:
+        self.plugins = plugins
+
+    @classmethod
+    def get_available_plugins(cls, tw_spec: Optional[TailwindSpec]):
+        return [
+            cls.PG_TAILWINDCSS
+        ] if tw_spec else []
+
 @dataclass
 class AppSpec:
     app_name: str
@@ -64,6 +76,7 @@ class AppSpec:
     language: Langauge
     pkg_manager: PackageManager
     tw: Optional[TailwindSpec]
+    prettier: Optional[PrettierSpec]
 
     def is_ts(self):
         return self.language is Langauge.Ts
