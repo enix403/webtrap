@@ -52,15 +52,19 @@ class Printer:
 
     def add_line(self, line: str):
         self.buf += line + '\n'
+        return self
 
     def add_chunk(self, chunk: str):
         self.buf += chunk
+        return self
 
     def add_newline(self):
         self.add_line('')
+        return self
 
     def add_pulled(self, content: str):
         self.add_chunk(pullback(content))
+        return self
 
 # ================================================
 
@@ -72,7 +76,9 @@ class JSPrinter(Printer):
     def add_import(self, items: str, loc: str):
         self.add_line(f'import {items} from \"{loc}\";')
         self.has_imports = True
+        return self
 
     def add_effect_import(self, loc: str):
         self.add_line(f'import \"{loc}\";')
         self.has_imports = True
+        return self

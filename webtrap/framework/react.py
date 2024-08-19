@@ -2,6 +2,7 @@ from webtrap.options import AppSpec, Artifact, Framework, Langauge
 from webtrap.printers import (
     Printer,
     JSPrinter,
+    pullback,
 )
 
 from webtrap.framework.base import BaseFramework
@@ -42,6 +43,12 @@ class ReactFramework(BaseFramework):
 
         self.src_fs = artifact.fs.makedir("src")
         self.styles_fs = artifact.fs.makedirs('src/styles')
+
+        if spec.is_ts():
+            self.src_fs.writetext("vite-env.d.ts", pullback("""
+                /// <reference types="vite/client" />
+            """))
+
 
     def finalize(self, spec: AppSpec, artifact: Artifact):
         src = self.src_fs

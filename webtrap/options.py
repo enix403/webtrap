@@ -48,6 +48,9 @@ class AppSpec:
     language: Langauge
     pkg_manager: PackageManager
 
+    def is_ts(self):
+        return self.language is Langauge.Ts
+
 
 @dataclass
 class Artifact:
