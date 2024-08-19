@@ -171,4 +171,22 @@ def fill_langconfig(spec: AppSpec, artifact: Artifact):
 # ----------------------------------------------
 
 def fill_tailwind(spec: AppSpec, artifact: Artifact):
-    pass
+    artifact.pkgjson.add_dev_dep('tailwindcss', '^3.3.3')
+    artifact.pkgjson.add_dev_dep('postcss', '^8.4.38')
+    artifact.pkgjson.add_dev_dep('autoprefixer', '^10.4.15')
+
+    artifact.tailwindconf.add_content("./index.html")
+    artifact.tailwindconf.add_content("./src/**/*.{js,ts,jsx,tsx}")
+
+    with artifact.fs.open('postcss.config.js', 'w') as f:
+        p = JSPrinter()
+        p.add_pulled("""
+        export default {
+          plugins: {
+            tailwindcss: {},
+            autoprefixer: {},
+          }
+        };
+        """)
+        f.write(p.get())
+

@@ -54,6 +54,7 @@ independent libraries:
   helmet
   svgr
   ts-pattern
+  react-html-props
 
 fontsource:
   common

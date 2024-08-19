@@ -27,7 +27,7 @@ def pullback(content: str):
 
         lines[i] = lines[i][remove_indent:]
 
-    return '\n'.join(lines).strip('\n') + '\n'
+    return '\n'.join(lines).strip('\n').rstrip() + '\n'
 
 def indent_lines(content: str, indent=2):
     lines = content.splitlines()
