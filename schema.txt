@@ -60,7 +60,6 @@ fontsource:
   common
 
 vercel
-ts/jsconfig paths
 
 -----------------------
 

@@ -17,8 +17,8 @@ class Framework(Enum):
     Astro = 'Astro'
 
 class Langauge(Enum):
-    Js = 'JavaScript'
     Ts = 'TypeScript'
+    Js = 'JavaScript'
 
     def file(self, name: str):
         ext = "js" if self is self.Js else 'ts'

@@ -47,7 +47,7 @@ def start():
         language=Langauge.Ts,
         pkg_manager=PackageManager.Pnpm
     )
-    # spec = input_spec()
+    spec = input_spec()
 
     output_path = "generated/react"
 
