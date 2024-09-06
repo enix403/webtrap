@@ -1,0 +1,34 @@
+{% if spec.routing %}
+import {
+    BrowserRouter,
+    Route,
+    Routes
+} from "react-router-dom";
+{% endif %}
+
+function AppContent() {
+  return (
+    <main>
+      <h1>React App</h1>
+      <div>
+        Hello there
+      </div>
+    </main>
+  );
+}
+
+{% if spec.routing %}
+export function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' Component={AppContent} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+{% else %}
+export function App() {
+  return <AppContent />;
+}
+{% endif %}

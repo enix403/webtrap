@@ -1,3 +1,7 @@
+from jinja2 import Environment, FileSystemLoader, PackageLoader, select_autoescape
+
+
+from webtrap.common import load_skel_jinja
 from webtrap.options import AppSpec, Artifact, Framework, Langauge
 from webtrap.printers import (
     Printer,
@@ -29,7 +33,6 @@ class ReactFramework(BaseFramework):
         if spec.language is Langauge.Ts:
             artifact.pkgjson.add_dev_dep("typescript", "^5.5.3")
 
-
         artifact.pkgjson.add_script("dev", "vite")
         if spec.language is Langauge.Ts:
             artifact.pkgjson.add_script("build", "tsc -b && vite build")
@@ -38,6 +41,8 @@ class ReactFramework(BaseFramework):
             artifact.pkgjson.add_script("build", "vite build")
         artifact.pkgjson.add_script("preview", "vite preview")
 
+        if spec.routing:
+            artifact.pkgjson.add_dep("react-router-dom", '^6.26.1')
 
         viteconf = ViteConfigPrinter()
         viteconf.add_import("react", "@vitejs/plugin-react")
@@ -89,20 +94,11 @@ class ReactFramework(BaseFramework):
             for im in self.entry_app_imports.items():
                 im.render_to(p)
 
-            p.add_newline()
+            p.add_line(
+                load_skel_jinja("react/App.jsx.jinja")
+                    .render(spec=spec)
+            )
 
-            p.add_pulled("""
-            export function App() {
-              return (
-                <>
-                  <h1>React App</h1>
-                  <div>
-                    Hello there
-                  </div>
-                </>
-              );
-            }
-            """)
             f.write(p.get())
 
         with artifact.fs.open("index.html", 'w') as f:
