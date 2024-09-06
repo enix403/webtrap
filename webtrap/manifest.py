@@ -33,7 +33,9 @@ class PackageManifest:
     #             self.scripts.pop(i)
     #             break
 
-    def add_dep(self, name: str, version: str):
+    def add_dep(self, name: str, version: str | None = None):
+        if version is None:
+            version = npm_package_latest_version(name)
         self.deps[name] = version
 
     # def remove_dep(self, name: str):

@@ -68,7 +68,19 @@ class PrettierSpec:
             cls.PG_TAILWINDCSS
         ] if tw_spec else []
 
-
+available_other_libs: list[str] = [
+    'clsx',
+    'react-helmet',
+    '@tabler/icons-react',
+    '@heroicons/react',
+    '@phosphor-icons/react',
+    'axios',
+    'date-fns',
+    'immer',
+    'framer-motion',
+    'react-html-props',
+    'ts-pattern',
+] 
 
 @dataclass
 class AppSpec:
@@ -80,6 +92,7 @@ class AppSpec:
     tw: Optional[TailwindSpec]
     prettier: Optional[PrettierSpec]
     routing: bool
+    other_libs: list[str]
 
     def is_ts(self):
         return self.language is Langauge.Ts

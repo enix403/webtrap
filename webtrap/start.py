@@ -5,6 +5,7 @@ from webtrap.options import AppSpec, PrettierSpec, TailwindSpec
 from webtrap.options import Framework
 from webtrap.options import Langauge
 from webtrap.options import PackageManager
+from webtrap.options import available_other_libs
 
 from webtrap.common import select_enum
 from webtrap.build import buildup
@@ -58,6 +59,11 @@ def input_spec():
     # ========= Routing =========
     routing = bool(confirm("Do you want to add routing?", default_is_yes=True))
 
+    # ========= Other libs =========
+    print("Select other packages to install: ")
+    other_libs: list[str] = select_multiple(available_other_libs)
+
+
     # ========= Combine all inputs =========
     spec = AppSpec(
         app_name=app_name,
@@ -67,7 +73,8 @@ def input_spec():
         pkg_manager=pkg_manager,
         tw=tw_spec,
         prettier=pt_spec,
-        routing=routing
+        routing=routing,
+        other_libs=other_libs
     )
 
     return spec
@@ -81,7 +88,14 @@ def start():
         pkg_manager=PackageManager.Pnpm,
         tw=TailwindSpec([TailwindSpec.PG_BREAKPOINTS_INSPECTOR, TailwindSpec.PG_RIPPLE_UI]),
         prettier=PrettierSpec([PrettierSpec.PG_TAILWINDCSS]),
-        routing=True
+        routing=True,
+        other_libs=[
+            'clsx',
+            'react-helmet',
+            '@tabler/icons-react',
+            'axios',
+            'date-fns',
+        ]
     )
     # spec = input_spec()
 

@@ -38,6 +38,9 @@ def buildup(spec: AppSpec, output_path: str):
     if spec.prettier:
         fill_prettier(spec, artifact)
 
+    for lib in spec.other_libs:
+        artifact.pkgjson.add_dep(lib)
+
     framework.finalize(spec, artifact)
 
     # ======= output the artifact =======
