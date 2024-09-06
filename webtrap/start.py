@@ -17,19 +17,19 @@ def input_spec():
         initial_value=kebabcase(app_name)
     )
 
-    # Framework
+    # ========= Framework =========
     framework = select_enum(Framework, 'Choose your framework:')
     # print(framework)
 
-    # Language
+    # ========= Language =========
     language = select_enum(Langauge, 'Choose your langauge:')
     # print(lang)
 
-    # Package Manager
+    # ========= Package Manager =========
     pkg_manager = select_enum(PackageManager, 'Choose your package manager:')
     # print(pkg_manager)
 
-    # Tailwind
+    # ========= Tailwind =========
     tw_spec: TailwindSpec | None = None
 
     tw_enabled = bool(confirm("Do you want to add tailwind?", default_is_yes=True))
@@ -41,7 +41,7 @@ def input_spec():
         
         tw_spec = TailwindSpec(selected_plugins)
 
-    # Prettier
+    # ========= Prettier =========
     pt_spec: PrettierSpec | None = None
 
     pt_enabled = bool(confirm("Do you want to add prettier?", default_is_yes=True))
@@ -55,7 +55,10 @@ def input_spec():
 
         pt_spec = PrettierSpec(selected_plugins)
 
-    # Combine all inputs
+    # ========= Routing =========
+    routing = bool(confirm("Do you want to add routing?", default_is_yes=True))
+
+    # ========= Combine all inputs =========
     spec = AppSpec(
         app_name=app_name,
         pkg_name=pkg_name,
@@ -63,7 +66,8 @@ def input_spec():
         language=language,
         pkg_manager=pkg_manager,
         tw=tw_spec,
-        prettier=pt_spec
+        prettier=pt_spec,
+        routing=routing
     )
 
     return spec
@@ -76,9 +80,10 @@ def start():
         language=Langauge.Ts,
         pkg_manager=PackageManager.Pnpm,
         tw=TailwindSpec([TailwindSpec.PG_BREAKPOINTS_INSPECTOR, TailwindSpec.PG_RIPPLE_UI]),
-        prettier=PrettierSpec([PrettierSpec.PG_TAILWINDCSS])
+        prettier=PrettierSpec([PrettierSpec.PG_TAILWINDCSS]),
+        routing=True
     )
-    spec = input_spec()
+    # spec = input_spec()
 
     output_path = "generated/react"
 

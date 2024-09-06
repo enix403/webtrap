@@ -68,6 +68,8 @@ class PrettierSpec:
             cls.PG_TAILWINDCSS
         ] if tw_spec else []
 
+
+
 @dataclass
 class AppSpec:
     app_name: str
@@ -77,6 +79,7 @@ class AppSpec:
     pkg_manager: PackageManager
     tw: Optional[TailwindSpec]
     prettier: Optional[PrettierSpec]
+    routing: bool
 
     def is_ts(self):
         return self.language is Langauge.Ts

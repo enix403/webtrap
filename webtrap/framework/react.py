@@ -8,8 +8,13 @@ from webtrap.printers import (
 from webtrap.framework.base import BaseFramework
 from .vite import ViteConfigPrinter
 
+from webtrap.importset import ImportSet
 
 class ReactFramework(BaseFramework):
+    def __init__(self):
+        super().__init__()
+        self.entry_app_imports = ImportSet()
+
     def create(self, spec: AppSpec, artifact: Artifact):
 
         artifact.pkgjson.add_extra('type', 'module')
@@ -48,7 +53,6 @@ class ReactFramework(BaseFramework):
             self.src_fs.writetext("vite-env.d.ts", pullback("""
                 /// <reference types="vite/client" />
             """))
-
 
     def finalize(self, spec: AppSpec, artifact: Artifact):
         src = self.src_fs
@@ -114,3 +118,11 @@ class ReactFramework(BaseFramework):
             </html>
             """)
             f.write(p.get())
+
+    # TODO: implement
+    def wrap_entry_jsx(self, opening: str, closing: str):
+        pass
+
+    # TODO: implement
+    def replace_entry_jsx(self, jsx):
+        pass

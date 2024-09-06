@@ -8,6 +8,8 @@ from fs.copy import copy_fs
 from webtrap.features.langconfig import fill_langconfig
 from webtrap.features.prettier import fill_prettier
 from webtrap.features.tailwind import TailwindConfigPrinter, fill_tailwind
+from webtrap.features.routing import fill_routing
+
 from webtrap.framework.react import ReactFramework
 from webtrap.options import AppSpec, Artifact
 from webtrap.manifest import PackageManifest
@@ -25,13 +27,24 @@ def buildup(spec: AppSpec, output_path: str):
         tailwindconf
     )
 
+    # ======= fill the artifact =======
+
     framework.create(spec, artifact)
+
     fill_langconfig(spec, artifact)
+
     if spec.tw:
         fill_tailwind(spec, artifact)
+
     if spec.prettier:
         fill_prettier(spec, artifact)
+
+    if spec.routing:
+        fill_routing(spec, artifact)
+
     framework.finalize(spec, artifact)
+
+    # ======= output the artifact =======
 
     with artifact.fs.open('package.json', 'w') as f:
         f.write(artifact.pkgjson.compile_str())
