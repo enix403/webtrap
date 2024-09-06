@@ -86,6 +86,11 @@ class ReactFramework(BaseFramework):
             if sorted_styles:
                 p.add_newline()
 
+            for im in self.entry_app_imports.items():
+                im.render_to(p)
+
+            p.add_newline()
+
             p.add_pulled("""
             export function App() {
               return (
