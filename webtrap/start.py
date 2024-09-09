@@ -92,13 +92,14 @@ def start():
         tw=TailwindSpec([TailwindSpec.PG_BREAKPOINTS_INSPECTOR, TailwindSpec.PG_RIPPLE_UI]),
         prettier=PrettierSpec([PrettierSpec.PG_TAILWINDCSS]),
         routing=True,
-        other_libs=[
-            'clsx',
-            'react-helmet',
-            '@tabler/icons-react',
-            'axios',
-            'date-fns',
-        ],
+        # other_libs=[
+        #     'clsx',
+        #     'react-helmet',
+        #     '@tabler/icons-react',
+        #     'axios',
+        #     'date-fns',
+        # ],
+        other_libs=[],
         add_vercel_json=True
     )
     # spec = input_spec()

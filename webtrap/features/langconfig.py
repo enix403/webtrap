@@ -1,7 +1,8 @@
 from fs.copy import copy_file
-from webtrap.options import AppSpec, Artifact
+from webtrap.options import AppSpec, Artifact, Framework
 
 def fill_langconfig(spec: AppSpec, artifact: Artifact):
+    assert spec.framework is Framework.React
 
     source_path = "webtrap/skel/react"
     files = [
