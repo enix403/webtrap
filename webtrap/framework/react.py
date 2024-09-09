@@ -44,14 +44,19 @@ class ReactFramework(BaseFramework):
         if spec.routing:
             artifact.pkgjson.add_dep("react-router-dom", '^6.26.1')
 
-        artifact.pkgjson.add_dev_dep("vite-tsconfig-paths", '^5.0.1')
 
         viteconf = ViteConfigPrinter()
         viteconf.add_import("react", "@vitejs/plugin-react")
-        viteconf.add_import("tsconfigPaths", "vite-tsconfig-paths")
-        
-        viteconf.add_plugin("tsconfigPaths()")
         viteconf.add_plugin("react()")
+
+        if spec.language is Langauge.Ts:
+            artifact.pkgjson.add_dev_dep("vite-tsconfig-paths", '^5.0.1')
+            viteconf.add_import("tsconfigPaths", "vite-tsconfig-paths")
+            viteconf.add_plugin("tsconfigPaths()")
+        else:
+            artifact.pkgjson.add_dev_dep("vite-jsconfig-paths", '^2.0.1')
+            viteconf.add_import("jsconfigPaths", "vite-jsconfig-paths")
+            viteconf.add_plugin("jsconfigPaths()")
 
         with artifact.fs.open(spec.language.file('vite.config'), 'w') as f:
             f.write(viteconf.get())
