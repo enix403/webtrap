@@ -1,3 +1,5 @@
+from fs import open_fs
+from fs.copy import copy_file
 from jinja2 import Environment, FileSystemLoader, PackageLoader, select_autoescape
 
 
@@ -63,6 +65,9 @@ class ReactFramework(BaseFramework):
 
         self.src_fs = artifact.fs.makedir("src")
         self.styles_fs = artifact.fs.makedirs('src/styles')
+        self.comp_fs = artifact.fs.makedirs('src/components')
+
+        self.add_components(spec)
 
         if spec.is_ts():
             self.src_fs.writetext("vite-env.d.ts", pullback("""
@@ -130,10 +135,7 @@ class ReactFramework(BaseFramework):
             """)
             f.write(p.get())
 
-    # TODO: implement
-    def wrap_entry_jsx(self, opening: str, closing: str):
-        pass
-
-    # TODO: implement
-    def replace_entry_jsx(self, jsx):
-        pass
+    def add_components(self, spec: AppSpec):
+        with open_fs('webtrap/skel/react/components') as src_fs:
+            file = spec.language.file_jsx('loadable')
+            copy_file(src_fs, file, self.comp_fs, file)
