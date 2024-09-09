@@ -63,6 +63,8 @@ def input_spec():
     print("Select other packages to install: ")
     other_libs: list[str] = select_multiple(available_other_libs)
 
+    # ========= Vercel.json =========
+    add_vercel_json = bool(confirm("Do you want to add vercel.json?", default_is_yes=True))
 
     # ========= Combine all inputs =========
     spec = AppSpec(
@@ -74,7 +76,8 @@ def input_spec():
         tw=tw_spec,
         prettier=pt_spec,
         routing=routing,
-        other_libs=other_libs
+        other_libs=other_libs,
+        add_vercel_json=add_vercel_json
     )
 
     return spec
@@ -95,7 +98,8 @@ def start():
             '@tabler/icons-react',
             'axios',
             'date-fns',
-        ]
+        ],
+        add_vercel_json=True
     )
     # spec = input_spec()
 

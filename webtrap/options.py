@@ -93,6 +93,7 @@ class AppSpec:
     prettier: Optional[PrettierSpec]
     routing: bool
     other_libs: list[str]
+    add_vercel_json: bool
 
     def is_ts(self):
         return self.language is Langauge.Ts

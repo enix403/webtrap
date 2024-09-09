@@ -8,6 +8,7 @@ from fs.copy import copy_fs
 from webtrap.features.langconfig import fill_langconfig
 from webtrap.features.prettier import fill_prettier
 from webtrap.features.tailwind import TailwindConfigPrinter, fill_tailwind
+from webtrap.features.vercel import fill_vercel
 
 from webtrap.framework.react import ReactFramework
 from webtrap.options import AppSpec, Artifact
@@ -37,6 +38,9 @@ def buildup(spec: AppSpec, output_path: str):
 
     if spec.prettier:
         fill_prettier(spec, artifact)
+
+    if spec.add_vercel_json:
+        fill_vercel(spec, artifact)
 
     for lib in spec.other_libs:
         artifact.pkgjson.add_dep(lib)
