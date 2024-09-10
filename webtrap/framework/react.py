@@ -63,11 +63,14 @@ class ReactFramework(BaseFramework):
         with artifact.fs.open(spec.language.file('vite.config'), 'w') as f:
             f.write(viteconf.get())
 
+        self.root_fs = artifact.fs
         self.src_fs = artifact.fs.makedir("src")
         self.styles_fs = artifact.fs.makedirs('src/styles')
-        self.comp_fs = artifact.fs.makedirs('src/components')
 
-        self.add_components(spec)
+        artifact.fs.makedirs('src/components')
+        artifact.fs.makedirs('public')
+
+        self.add_files(spec)
 
         if spec.is_ts():
             self.src_fs.writetext("vite-env.d.ts", pullback("""
@@ -135,7 +138,15 @@ class ReactFramework(BaseFramework):
             """)
             f.write(p.get())
 
-    def add_components(self, spec: AppSpec):
-        with open_fs('webtrap/skel/react/components') as src_fs:
-            file = spec.language.file_jsx('loadable')
-            copy_file(src_fs, file, self.comp_fs, file)
+    def add_files(self, spec: AppSpec):
+        with open_fs('webtrap/skel/react') as src_fs:
+            file = "components/" + spec.language.file_jsx('loadable')
+            copy_file(src_fs, file, self.src_fs, file)
+
+            copy_file(src_fs, '.gitignore', self.root_fs, '.gitignore')
+
+            with self.root_fs.open('README.md', 'w') as readme_f:
+                readme_f.write(
+                    load_skel_jinja("react/README.md.jinja")
+                        .render(app_name=spec.app_name)
+                )
